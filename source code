@@ -8,7 +8,7 @@
 ##    Please cite paper below if you use the metric or source code in your research work                                                                                           #####
 ##    "Quality Estimation for Machine Translation Using the Joint Method of Evaluation Criteria and Statistical Modeling". 2013. Aaron Li-Feng Han, Yi Lu, Derek F. Wong,          #####
 ##    Lidia S. Chao, Liangye He, and Junwen Xing. Proceedings of the ACL Eighth Workshop on Statistical Machine Translation, pages 365–372, Soﬁa, Bulgaria, August 8-9, 2013.      #####
-##    Source code website:                                                                                                                                                         #####
+##    Source code website: https://github.com/aaronlifenghan/aaron-project-ebleu                                                                                                   #####
 ##    Online paper: http://www.statmt.org/wmt13/pdf/WMT45.pdf                                                                                                                      #####
 ########################################################################################################################################################################################
 ##    How to use this Perl code and how to assign the weights of sub-factors, e.g. n-gram Precision and Recall.                                                                    #####
@@ -27,7 +27,7 @@ opendir (DIR, "D:\\eBLEU wmt13\\Task1.1\\test\\target\\UniPOS") || die "can not 
 closedir (DIR);
 
 open REF,"<:encoding(utf8)","D:\\eBLEU wmt13\\Task1.1\\test\\src\\UniPOS\\Universal_pos_source.eng.tok.parsed.pos" or die "can't open reference file \n"; ## Put you reference translation document under the address
-  	$j=0;
+		$j=0;
 		$str1="";
 		@arry_r1=();
 		@arry_ref_length= ();
