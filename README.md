@@ -1,13 +1,26 @@
 aaron-project-ebleu
 ===================
 
-EBLEU: Quality Estimation for Machine Translation Using the Joint Method of Evaluation Criteria and Statistical Modeling
+EBLEU: Quality Estimation for Machine Translation Using the Method of Evaluation Criteria
 
-aaron-project-hlepor: open source for research only
-introduction of hLEPOR: Language independent Model for Machine Translation Evaluation with Reinforced Factors
+Welcome to the aaron-project-ebleu!
+Open source for research only.
 
-hLEPOR is a language independent machine translation evaluation metric with reinforced factors. hLEPOR is open source, free for research purpose. Experiments on ACL-WMT11 corpora (English to German, French, Spanish, Czech; and the reverse direction) show hLEPOR yields higher correlation scores with human judgments at system-level, as compared to MPF, ROSE, METEOR, BLEU, and TER evaluation metrics. Detailed knowledge of hLEPOR is shown in the paper "Language-independent Model for Machine Translation Evaluation with Reinforced Factors" by Aaron Li-Feng Han, Derek F. Wong, Lidia S. Chao, Liangye He, Yi Lu, Junwen Xing and Xiaodong Zeng. in Proceedings of the Machine Translation Summit XIV, Nice, France. International Association for Machine Translation. (http://www.mtsummit2013.info/programme.asp). If you use the hLEPOR metric in your researches, please cite the paper.
+EBLEU is a language independent machine translation evaluation metric with the factors of modified length penalty (MLP),
+n-gram Precision and n-gram Recall. EBLEU is first proposed in the ACL-WMT13 Quality Estimation Tasks 
+(http://www.statmt.org/wmt13/quality-estimation-task.html). Quality estimation is the advanced technology of machine
+translation evaluation without using reference translations. EBLEU tries to evaluate the translation quality 
+(cost of post editing time) by the exploring of traditional evaluation criteria and some linguistic features, such as
+the Part-of-Speech. 
+Experiment reports on ACL-WMT13 corpora (Task 1.1 Scoring and ranking for post-editing effort, English-Spanish) show 
+EBLEU yields acceptable scores. Mean-Average-Error (MAE) and Root-Mean-Squared-Error (RMSE) scores of EBLEU are 16.97 
+and 21.94 respectively.
 
-In the ACL-WMT 2013 Metrics Task (http://www.statmt.org/wmt13/metrics-task.html), hLEPOR (i.e. LEPOR_V3.1 in the Workshop report paper) also yields the highest Pearson correlation score with human judgment on the English-to-Russian language pair, in addition to the highest average-score on five language pairs (**English-to-German, French, Spanish, Czech, Russian**). The detailed results of WMT13 Metrics Task is introduced in the paper "A Description of Tunable Machine Translation Evaluation Systems in WMT13 Metrics Task" by Aaron Li-Feng Han, Derek F. Wong, Lidia S. Chao, Yi Lu, Liangye He, Yiming Wang and Jiaji Zhou, in Proceedings of ACL-WMT13 (http://www.statmt.org/wmt13/pdf/WMT53.pdf).
+Detailed knowledge of EBLEU is shown in the paper "Quality Estimation for Machine Translation Using the Joint Method of
+Evaluation Criteria and Statistical Modeling" by Aaron Li-Feng Han, Yi Lu, Derek F. Wong, Lidia S. Chao, Liangye He, 
+and Junwen Xing. Proceedings of the ACL Eighth Workshop on Statistical Machine Translation, pages 365–372, Soﬁa, 
+Bulgaria, August 8-9, 2013. Association for Computational Linguistics.  (http://www.statmt.org/wmt13/pdf/WMT45.pdf). 
+If you use the EBLEU metric in your researches, please cite the paper.
+
 
 Contact: hanlifengaaron AT gmail.com
