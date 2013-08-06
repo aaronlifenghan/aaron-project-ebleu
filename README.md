@@ -1,4 +1,4 @@
-aaron-project-ebleu
+aaron-project-ebleu: Quality Estimation for Machine Translation Using the Joint Method of Evaluation Criteria and Statistical Modeling
 ===================
 
 EBLEU: Quality Estimation for Machine Translation Using the Method of Evaluation Criteria
