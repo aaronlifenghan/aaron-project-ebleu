@@ -1,0 +1,133 @@
+#!/usr/bin/perl -w  
+
+########################################################################################################################################################################################
+##    For a detailed description of this evaluation metric and source code, please read:                                                                                           #####
+##    This code is to change the spanish POS tags (by Berkeley) into universal type for many documents under the same file address                                                 #####
+##    This perl code is  written by Aaron Li-Feng Han in university of macau, 2013.01                                                                                              #####
+##    This method is proposed by Aaron Li-Feng Han, Yi Lu, Derek F. Wong, Lidia S. Chao, Liangye He, and Junwen Xing in University of Macau                                        #####
+##    All Copyright (c) preserved by the authors. Corresponding author: Aaron Li-Feng Han < hanlifengaaron@gmail.com >                                                             #####
+##    Please cite paper below if you use the metric or source code in your research work                                                                                           #####
+##    "Quality Estimation for Machine Translation Using the Joint Method of Evaluation Criteria and Statistical Modeling". 2013. Aaron Li-Feng Han, Yi Lu, Derek F. Wong,          #####
+##    Lidia S. Chao, Liangye He, and Junwen Xing. Proceedings of the ACL Eighth Workshop on Statistical Machine Translation, pages 365–372, So?a, Bulgaria, August 8-9, 2013.      #####
+##    Source code website: https://github.com/aaronlifenghan/aaron-project-ebleu                                                                                                   #####
+##    Online paper: http://www.statmt.org/wmt13/pdf/WMT45.pdf                                                                                                                      #####
+########################################################################################################################################################################################
+##    How to use this Perl code.                                                                                                                                                   #####
+##    1. Your system documents should contain the plain text only.                                                                                                                 #####
+##    2. Put you documents that contain the spanish POS under the address in Line 22, 31, 35 of this Perl code.                                                                    #####
+##    3. The document containing converted Universal POS will be shown under the address in Line 36 of this Perl code.                                                             #####
+##                                                                                                                                                                                 #####
+########################################################################################################################################################################################
+
+opendir (DIR, "D:\\eBLEU wmt13\\Task1.1\\test\\target") || die "can not open output file!"; ##Put you documents that contain the spanish POS under the address
+
+@filename=readdir(DIR);
+
+closedir (DIR);
+
+foreach $file (@filename)
+  {
+
+		if(!(-d "D:\\eBLEU wmt13\\Task1.1\\test\\target\\$file")) ##Put you documents that contain the spanish POS under the address
+		
+			{
+				
+				open (TEST,"<:encoding(utf8)","D:\\eBLEU wmt13\\Task1.1\\test\\target\\$file") || die "can not open file: $!"; ##Put you documents that contain the spanish POS under the address
+				open (RESULT,">:encoding(utf8)","D:\\eBLEU wmt13\\Task1.1\\test\\target\\Universal_pos_$file") || die "$!"; ##The document containing converted Universal POS will be shown under the address
+				
+				
+				$i=0;
+				$str0="";
+				@arry_1= ();
+				@arry_sys_length= ();
+				@arrytwo_sys_translation= ();
+				$sentence_num=0;
+				while($str0=<TEST>)                       #### put the system translation into a two dimension array @arrytwo_sys_translation
+					{
+						chomp($str0);
+						## $str0= lc ($str0);   ### both reference and system output translation is turned into lowwer case
+						@arry_1= split(/\s+/,$str0);
+						$arry_sys_length[$i]=scalar(@arry_1);       #### @arry_sys_length store the lengths of every sentence(line) of the system translation.
+						$i++;
+						push @arrytwo_sys_translation, [@arry_1];
+						@arry_1= ();
+					}
+				$sentence_num=$i;
+				close TEST;
+					
+					
+				for($i=0;$i<$sentence_num;$i++)        #####  Change the original pos tag into the universal type uning mappings  
+					{
+						for($j=0;$j<$arry_sys_length[$i];$j++)
+							{
+								if($arrytwo_sys_translation[$i][$j] eq ADJ)
+								#if(grep(/^$arrytwo_sys_translation[$i][$j]/, @record_label))
+									{
+										$arrytwo_sys_translation[$i][$j]=ADJ;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq PREP||$arrytwo_sys_translation[$i][$j] eq 'PREP/DEL')
+									{
+										$arrytwo_sys_translation[$i][$j]=ADP;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq ADV||$arrytwo_sys_translation[$i][$j] eq NEG)
+									{
+										$arrytwo_sys_translation[$i][$j]=ADV;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq CC||$arrytwo_sys_translation[$i][$j] eq CCAD||$arrytwo_sys_translation[$i][$j] eq CCNEG||$arrytwo_sys_translation[$i][$j] eq CQUE||$arrytwo_sys_translation[$i][$j] eq CSUBF||$arrytwo_sys_translation[$i][$j] eq CSUBI||$arrytwo_sys_translation[$i][$j] eq CSUBX)
+									{
+										$arrytwo_sys_translation[$i][$j]=CONJ;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq ART)
+									{
+										$arrytwo_sys_translation[$i][$j]=DET;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq NC||$arrytwo_sys_translation[$i][$j] eq NMEA||$arrytwo_sys_translation[$i][$j] eq NMON||$arrytwo_sys_translation[$i][$j] eq NP||$arrytwo_sys_translation[$i][$j] eq PERCT||$arrytwo_sys_translation[$i][$j] eq UMMX)
+									{
+										$arrytwo_sys_translation[$i][$j]=NOUN;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq CARD||$arrytwo_sys_translation[$i][$j] eq CODE||$arrytwo_sys_translation[$i][$j] eq QU)
+									{
+										$arrytwo_sys_translation[$i][$j]=NUM;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq DM||$arrytwo_sys_translation[$i][$j] eq INT||$arrytwo_sys_translation[$i][$j] eq PPC||$arrytwo_sys_translation[$i][$j] eq PPO||$arrytwo_sys_translation[$i][$j] eq PPX||$arrytwo_sys_translation[$i][$j] eq PEL)
+									{
+										$arrytwo_sys_translation[$i][$j]=PRON;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq SE)
+									{
+										$arrytwo_sys_translation[$i][$j]=PRT;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq VCLIger||$arrytwo_sys_translation[$i][$j] eq VCLIinf||$arrytwo_sys_translation[$i][$j] eq VCLIfin||$arrytwo_sys_translation[$i][$j] eq VEadj||$arrytwo_sys_translation[$i][$j] eq VEfin||$arrytwo_sys_translation[$i][$j] eq VEger||$arrytwo_sys_translation[$i][$j] eq VEinf||$arrytwo_sys_translation[$i][$j] eq VHadj||$arrytwo_sys_translation[$i][$j] eq VHfin||$arrytwo_sys_translation[$i][$j] eq VHger||$arrytwo_sys_translation[$i][$j] eq VHinf||$arrytwo_sys_translation[$i][$j] eq VLadj||$arrytwo_sys_translation[$i][$j] eq VLfin||$arrytwo_sys_translation[$i][$j] eq VLger||$arrytwo_sys_translation[$i][$j] eq VLinf||$arrytwo_sys_translation[$i][$j] eq VMadj||$arrytwo_sys_translation[$i][$j] eq VMfin||$arrytwo_sys_translation[$i][$j] eq VMger||$arrytwo_sys_translation[$i][$j] eq VMinf||$arrytwo_sys_translation[$i][$j] eq VSadj||$arrytwo_sys_translation[$i][$j] eq VSfin||$arrytwo_sys_translation[$i][$j] eq VSger||$arrytwo_sys_translation[$i][$j] eq VSinf)
+									{
+										$arrytwo_sys_translation[$i][$j]=VERB;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq ACRNM||$arrytwo_sys_translation[$i][$j] eq ALFP||$arrytwo_sys_translation[$i][$j] eq ALFS||$arrytwo_sys_translation[$i][$j] eq FO||$arrytwo_sys_translation[$i][$j] eq ITJN||$arrytwo_sys_translation[$i][$j] eq ORD||$arrytwo_sys_translation[$i][$j] eq PAL||$arrytwo_sys_translation[$i][$j] eq PDEL||$arrytwo_sys_translation[$i][$j] eq PE||$arrytwo_sys_translation[$i][$j] eq PNC||$arrytwo_sys_translation[$i][$j] eq SYM)
+									{
+										$arrytwo_sys_translation[$i][$j]=X;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq BACKSLASH||$arrytwo_sys_translation[$i][$j] eq CM||$arrytwo_sys_translation[$i][$j] eq COLON||$arrytwo_sys_translation[$i][$j] eq DASH||$arrytwo_sys_translation[$i][$j] eq DOTS||$arrytwo_sys_translation[$i][$j] eq FS||$arrytwo_sys_translation[$i][$j] eq LP||$arrytwo_sys_translation[$i][$j] eq QT||$arrytwo_sys_translation[$i][$j] eq RP||$arrytwo_sys_translation[$i][$j] eq SEMICOLON||$arrytwo_sys_translation[$i][$j] eq SLASH)
+									{
+										$arrytwo_sys_translation[$i][$j]= ".";
+									}
+																
+								else       ##if there appear other tags that are not in the mapping set, then the strange tags will be assigned to the classification of Punctuation ??
+									{
+										$arrytwo_sys_translation[$i][$j]= ".";
+									}
+								
+							}
+					}        
+		
+				for($i=0;$i<$sentence_num;$i++)        #####  print out the changed document to have a check  
+					{
+						for($j=0;$j<$arry_sys_length[$i];$j++)
+							{
+								print RESULT "$arrytwo_sys_translation[$i][$j]"," ";
+							}
+						print RESULT "\n";
+					}
+				
+				close RESULT;
+			}
+	}
+
