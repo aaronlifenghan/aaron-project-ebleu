@@ -1,0 +1,133 @@
+#!/usr/bin/perl -w  
+
+########################################################################################################################################################################################
+##    For a detailed description of this evaluation metric and source code, please read:                                                                                           #####
+##    This code is to change the english POS tags (by Berkeley) into universal type for many documents under the same file address                                                 #####
+##    This perl code is  written by Aaron Li-Feng Han in university of macau, 2013.01                                                                                              #####
+##    This method is proposed by Aaron Li-Feng Han, Yi Lu, Derek F. Wong, Lidia S. Chao, Liangye He, and Junwen Xing in University of Macau                                        #####
+##    All Copyright (c) preserved by the authors. Corresponding author: Aaron Li-Feng Han < hanlifengaaron@gmail.com >                                                             #####
+##    Please cite paper below if you use the metric or source code in your research work                                                                                           #####
+##    "Quality Estimation for Machine Translation Using the Joint Method of Evaluation Criteria and Statistical Modeling". 2013. Aaron Li-Feng Han, Yi Lu, Derek F. Wong,          #####
+##    Lidia S. Chao, Liangye He, and Junwen Xing. Proceedings of the ACL Eighth Workshop on Statistical Machine Translation, pages 365–372, So?a, Bulgaria, August 8-9, 2013.      #####
+##    Source code website: https://github.com/aaronlifenghan/aaron-project-ebleu                                                                                                   #####
+##    Online paper: http://www.statmt.org/wmt13/pdf/WMT45.pdf                                                                                                                      #####
+########################################################################################################################################################################################
+##    How to use this Perl code.                                                                                                                                                   #####
+##    1. Your system documents should contain the plain text only.                                                                                                                 #####
+##    2. Put you documents that contain the english POS content under the address in Line 22, 31, 35 of this Perl code.                                                            #####
+##    3. The document containing converted Universal POS will be shown under the address in Line 36 of this Perl code.                                                             #####
+##                                                                                                                                                                                 #####
+########################################################################################################################################################################################
+
+opendir (DIR, "D:\\eBLEU wmt13\\Task1.1\\test\\src") || die "can not open output file!"; ##Put you documents that contain the english POS content under the address
+
+@filename=readdir(DIR);
+
+closedir (DIR);
+
+foreach $file (@filename)
+  {
+
+		if(!(-d "D:\\eBLEU wmt13\\Task1.1\\test\\src\\$file")) ##Put you documents that contain the english POS content under the address
+		
+			{
+				
+				open (TEST,"<:encoding(utf8)","D:\\eBLEU wmt13\\Task1.1\\test\\src\\$file") || die "can not open file: $!"; ##Put you documents that contain the english POS content under the address
+				open (RESULT,">:encoding(utf8)","D:\\eBLEU wmt13\\Task1.1\\test\\src\\Universal_pos_$file") || die "$!"; ##The document containing converted Universal POS will be shown under the address
+				
+				
+				$i=0;
+				$str0="";
+				@arry_1= ();
+				@arry_sys_length= ();
+				@arrytwo_sys_translation= ();
+				$sentence_num=0;
+				while($str0=<TEST>)                       #### put the system translation into a two dimension array @arrytwo_sys_translation
+					{
+						chomp($str0);
+						## $str0= lc ($str0);   ### both reference and system output translation is turned into lowwer case
+						@arry_1= split(/\s+/,$str0);
+						$arry_sys_length[$i]=scalar(@arry_1);       #### @arry_sys_length store the lengths of every sentence(line) of the system translation.
+						$i++;
+						push @arrytwo_sys_translation, [@arry_1];
+						@arry_1= ();
+					}
+				$sentence_num=$i;
+				close TEST;
+					
+					
+				for($i=0;$i<$sentence_num;$i++)        #####  Change the original pos tag into the universal type uning mappings  
+					{
+						for($j=0;$j<$arry_sys_length[$i];$j++)
+							{
+								if($arrytwo_sys_translation[$i][$j] eq JJ||$arrytwo_sys_translation[$i][$j] eq JJR||$arrytwo_sys_translation[$i][$j] eq JJS)
+								#if(grep(/^$arrytwo_sys_translation[$i][$j]/, @record_label))
+									{
+										$arrytwo_sys_translation[$i][$j]=ADJ;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq IN)
+									{
+										$arrytwo_sys_translation[$i][$j]=ADP;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq RB||$arrytwo_sys_translation[$i][$j] eq RBR||$arrytwo_sys_translation[$i][$j] eq RBS||$arrytwo_sys_translation[$i][$j] eq WRB)
+									{
+										$arrytwo_sys_translation[$i][$j]=ADV;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq CC)
+									{
+										$arrytwo_sys_translation[$i][$j]=CONJ;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq DT||$arrytwo_sys_translation[$i][$j] eq EX||$arrytwo_sys_translation[$i][$j] eq PDT||$arrytwo_sys_translation[$i][$j] eq WDT)
+									{
+										$arrytwo_sys_translation[$i][$j]=DET;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq NN||$arrytwo_sys_translation[$i][$j] eq NNP||$arrytwo_sys_translation[$i][$j] eq NNPS||$arrytwo_sys_translation[$i][$j] eq NNS)
+									{
+										$arrytwo_sys_translation[$i][$j]=NOUN;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq CD)
+									{
+										$arrytwo_sys_translation[$i][$j]=NUM;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq PRP||$arrytwo_sys_translation[$i][$j] eq "PRP\$"||$arrytwo_sys_translation[$i][$j] eq WP||$arrytwo_sys_translation[$i][$j] eq "WP\$")
+									{
+										$arrytwo_sys_translation[$i][$j]=PRON;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq POS||$arrytwo_sys_translation[$i][$j] eq RP||$arrytwo_sys_translation[$i][$j] eq TO)
+									{
+										$arrytwo_sys_translation[$i][$j]=PRT;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq MD||$arrytwo_sys_translation[$i][$j] eq VB||$arrytwo_sys_translation[$i][$j] eq VBD||$arrytwo_sys_translation[$i][$j] eq VBG||$arrytwo_sys_translation[$i][$j] eq VBN||$arrytwo_sys_translation[$i][$j] eq VBP||$arrytwo_sys_translation[$i][$j] eq VBZ)
+									{
+										$arrytwo_sys_translation[$i][$j]=VERB;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq FW||$arrytwo_sys_translation[$i][$j] eq LS||$arrytwo_sys_translation[$i][$j] eq SYM||$arrytwo_sys_translation[$i][$j] eq UH)
+									{
+										$arrytwo_sys_translation[$i][$j]=X;
+									}
+								elsif($arrytwo_sys_translation[$i][$j] eq "#"||$arrytwo_sys_translation[$i][$j] eq "\$"||$arrytwo_sys_translation[$i][$j] eq "\""||$arrytwo_sys_translation[$i][$j] eq "-LRB-"||$arrytwo_sys_translation[$i][$j] eq "-RRB-"||$arrytwo_sys_translation[$i][$j] eq "."||$arrytwo_sys_translation[$i][$j] eq ":"||$arrytwo_sys_translation[$i][$j] eq ",")
+									{
+										$arrytwo_sys_translation[$i][$j]= ".";
+									}
+																
+								else       ##if there appear other tags that are not in the mapping set, then the strange tags will be assigned to the classification of Punctuation ??
+									{
+										$arrytwo_sys_translation[$i][$j]= ".";
+									}
+								
+							}
+					}        
+		
+				for($i=0;$i<$sentence_num;$i++)        #####  print out the changed document to have a check  
+					{
+						for($j=0;$j<$arry_sys_length[$i];$j++)
+							{
+								print RESULT "$arrytwo_sys_translation[$i][$j]"," ";
+							}
+						print RESULT "\n";
+					}
+				
+				close RESULT;
+			}
+	}
+
