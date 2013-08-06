@@ -2,7 +2,7 @@
 
 ########################################################################################################################################################################################
 ##    For a detailed description of this evaluation metric and source code, please read:                                                                                           #####
-##    This code is to change the spanish POS tags (by Berkeley) into universal type for many documents under the same file address                                                 #####
+##    To change the Spanish POS tags (by TreeTagger http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/) into universal POS https://code.google.com/p/universal-pos-tags/     #####
 ##    This perl code is  written by Aaron Li-Feng Han in university of macau, 2013.01                                                                                              #####
 ##    This method is proposed by Aaron Li-Feng Han, Yi Lu, Derek F. Wong, Lidia S. Chao, Liangye He, and Junwen Xing in University of Macau                                        #####
 ##    All Copyright (c) preserved by the authors. Corresponding author: Aaron Li-Feng Han < hanlifengaaron@gmail.com >                                                             #####
@@ -26,7 +26,7 @@ opendir (DIR, "D:\\eBLEU wmt13\\Task1.1\\test\\target") || die "can not open out
 closedir (DIR);
 
 foreach $file (@filename)
-  {
+	{
 
 		if(!(-d "D:\\eBLEU wmt13\\Task1.1\\test\\target\\$file")) ##Put you documents that contain the spanish POS under the address
 		
